@@ -218,10 +218,8 @@ class BrowserifyTransform extends AssetTransform {
     if (result) return callback(null, result)
 
     let b = browserify({debug: true, extensions: ['.js']})
-    b.transform(babelify.configure({
-      extensions: ['.js'],
-      only: /tests|tools/
-    }))
+
+    b.transform(babelify, {presets: ['@babel/preset-env']})
     b.transform(preprocessify())
     b.add(assetPath)
     b.bundle((err, buf) => {

@@ -2,7 +2,7 @@
   "parserOptions": {
     "globalReturn": true,
     "sourceType": "script",
-    "ecmaVersion": 5
+    "ecmaVersion": 6
   },
   "extends": "standard",
   "env": {

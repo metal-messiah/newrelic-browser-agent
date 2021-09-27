@@ -17,6 +17,7 @@ var preprocessify = require('preprocessify')
 var globalRequire = '__nr_require'
 var collapser = require('bundle-collapser/plugin')
 var cleanDeps = require('./tools/scripts/clean-deps')
+var babelify = require('babelify')
 
 module.exports = 'build'
 
@@ -90,6 +91,7 @@ function loader (name, features, min, payloadName) {
       debug: true
     })
 
+    bundler.transform(babelify, {presets: ['@babel/preset-env']})
     bundler.require('loader', {entry: true, expose: 'loader'})
     loaderExports.forEach(function (name) { bundler.require(name) })
     features.forEach(function (feature) { bundler.add('./feature/' + feature + '/instrument/index.js') })
@@ -122,6 +124,7 @@ function payload (min, features, type) {
       debug: true
     })
 
+    bundler.transform(babelify, {presets: ['@babel/preset-env']})
     features
       .map(function (feature) { return './feature/' + feature + '/aggregate/index.js' })
       .forEach(function (item) { bundler.add(item) })
@@ -163,6 +166,7 @@ function plugin (name, min) {
       debug: true
     })
 
+    bundler.transform('babelify', {presets: ['@babel/preset-env']})
     bundler.add('./plugins/' + name + '.js', { entry: true })
     loaderExports.forEach(function (module) {
       bundler.external(module)
