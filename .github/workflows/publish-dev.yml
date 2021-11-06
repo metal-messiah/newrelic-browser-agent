@@ -30,6 +30,7 @@ jobs:
           name: build
           path: build
   publish-to-s3:
+    needs: build
     runs-on: ubuntu-latest
     container: node:14
     env:
