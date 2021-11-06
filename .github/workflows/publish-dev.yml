@@ -56,3 +56,4 @@ jobs:
             --bucket ${{ secrets.AWS_BUCKET }} \
             --role ${{ secrets.AWS_ROLE_ARN }} \
             --dev
+            --dry
