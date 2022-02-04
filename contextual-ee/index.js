@@ -10,7 +10,7 @@ var mapOwn = require('map-own')
 var eventBuffer = {}
 var emitters = {}
 
-var baseEE = module.exports = ee()
+var baseEE = window.ee = module.exports = ee()
 module.exports.getOrSetContext = getOrSetContext
 
 baseEE.backlog = eventBuffer
@@ -71,6 +71,11 @@ function ee (old) {
     // to the context with the arguments
 
     for (var i = 0; i < len; i++) handlersArray[i].apply(ctx, args)
+
+    if (!(type.lastIndexOf('DEBUG', 0) === 0)) {
+      window.ee.emit('DEBUG', args, contextOrStore, force, bubble)
+      window.ee.emit('DEBUG-' + type, args, contextOrStore, force, bubble)
+    }
 
     // Buffer after emitting for consistent ordering
     var bufferGroup = eventBuffer[bufferGroupMap[type]]
