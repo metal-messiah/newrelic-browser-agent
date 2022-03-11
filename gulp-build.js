@@ -39,10 +39,14 @@ loaders.forEach(function (opt) {
   var minName = name + '.min'
   var aggregator = opt.name + '-aggregator'
   var minAggregator = aggregator + '.min'
+
   allLoaderNames.push(name, minName)
+
   gulp.task(name, loader(opt.name, opt.features, false, opt.payload))
   gulp.task(minName, loader(opt.name, opt.features, true, opt.payload))
+
   if (!opt.payload) return
+
   gulp.task(aggregator, payload(false, opt.features, opt.name))
   gulp.task(minAggregator, payload(true, opt.features, opt.name))
   allPayloadNames.push(aggregator, minAggregator)
@@ -79,21 +83,42 @@ function measureSizes () {
     .pipe(gulp.dest('./build/'))
 }
 
+// Creates loader file and saves to ./build 
+//
+// name: String - name of loader, `name` from `./loaders.js`
+// features: Array - list of feature names from `./loaders.js`
+// min: Boolean - indicates whether file generated should be minified
+// payloadName: String (optional) - name of aggregator payload to include in bundle (see ./lib/versionify.js) if null, uses nr.js.
+
 function loader (name, features, min, payloadName) {
   return function () {
     var filename = 'nr-loader-' + name + (min ? '.min' : '') + '.js'
-    var bundler = browserify({
+    var bundler = browserify({ // passing opts object to browserify [see opts: https://github.com/browserify/browserify/tree/13.0.1#browserifyfiles--opts]
+      // externalRequireName defaults to 'require' in expose mode, this overrides that default. [https://github.com/browserify/browserify/tree/13.0.1#browserifyfiles--opts]
       externalRequireName: 'window.NREUM || (NREUM={});' + globalRequire,
       prelude: loaderPrelude,
-      transform: [preprocessify(), versionify(min, payloadName)],
+      transform: [
+        preprocessify(), // module for injecting code based on ENV values (search repo for `ifdef` for example) [https://github.com/jsoverson/preprocess#what-does-it-look-like]
+        versionify(min, payloadName) // see ./lib/versionify, replaces the default `agent` val (aggregator URL) in newrelic.info
+      ],
       plugin: [collapser, cleanDeps],
       debug: true
     })
 
+    // bundler.require(file, opts) [https://github.com/browserify/browserify/tree/13.0.1#brequirefile-opts]
+    //   Make `file` available from outside the bundle with require(file).
     bundler.require('loader', {entry: true, expose: 'loader'})
     loaderExports.forEach(function (name) { bundler.require(name) })
-    features.forEach(function (feature) { bundler.add('./feature/' + feature + '/instrument/index.js') })
+  
+    // bundler.add(file, opts) [https://github.com/browserify/browserify/tree/13.0.1#baddfile-opts]
+    //   Add an entry file that will be executed when the bundle loads.
+    features
+      .map(function (feature) { return './feature/' + feature + '/instrument/index.js' })
+      .forEach(function (item) { bundler.add(item) })
 
+
+    // b.bundle(cb) [https://github.com/browserify/browserify/tree/13.0.1#bbundlecb]
+    //   Bundle the files and their dependencies into a single javascript file.
     var bundleStream = bundler.bundle()
       .pipe(source(filename))
       .pipe(buffer())
@@ -126,8 +151,11 @@ function payload (min, features, type) {
       .map(function (feature) { return './feature/' + feature + '/aggregate/index.js' })
       .forEach(function (item) { bundler.add(item) })
 
+
     bundler.add('./agent/index.js', { entry: true })
 
+    // b.external(file) [https://github.com/browserify/browserify/tree/13.0.1#bexternalfile]
+    //   Prevent file from being loaded into the current bundle, instead referencing from another bundle. 
     bundler.external('loader')
     loaderExports.forEach(function (module) {
       bundler.external(module)
