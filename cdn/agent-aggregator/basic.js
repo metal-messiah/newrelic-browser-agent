@@ -4,7 +4,7 @@ import { setInfo, setConfiguration, setLoaderConfig } from '../../modules/common
 import { global as globalDrain } from '../../modules/common/drain/drain'
 import { activateFeatures } from '../../modules/common/util/feature-flags'
 import { addFnToNREUM, gosNREUM } from '../../modules/common/window/nreum'
-import { conditionallySet } from '../../modules/common/timing/start-time'
+import { conditionallySet } from '../../modules/common/cookie/nav-cookie'
 import { sendRUM } from '../../modules/features/page-view-event/aggregate'
 import { init as initPageViewTimings } from '../../modules/features/page-view-timing/aggregate'
 
