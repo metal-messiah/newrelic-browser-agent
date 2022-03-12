@@ -1,4 +1,5 @@
 build/*.js
+build-legacy/*.js
 tools/scripts/*.js
 **/node_modules/*
 **/vendor/*

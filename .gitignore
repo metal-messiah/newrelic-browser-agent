@@ -1,4 +1,5 @@
 /build
+/build-legacy
 **/dist
 /config
 /tmp

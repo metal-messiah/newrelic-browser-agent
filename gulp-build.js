@@ -17,6 +17,7 @@ var preprocessify = require('preprocessify')
 var globalRequire = '__nr_require'
 var collapser = require('bundle-collapser/plugin')
 var cleanDeps = require('./tools/scripts/clean-deps')
+var assetFolder = 'build-legacy'
 
 module.exports = 'build'
 
@@ -76,11 +77,11 @@ gulp.task('build', gulp.series(gulp.parallel('loader', 'payload', 'plugin'), 'si
 function measureSizes () {
   var artifacts = ['nr-loader-spa.min.js', 'nr-loader-full.min.js', 'nr-loader-rum.min.js', 'nr.min.js']
   var sizes = artifacts.map(function (artifact) {
-    return fs.statSync('build/' + artifact).size / 1024.0
+    return fs.statSync(assetFolder + '/' + artifact).size / 1024.0
   })
   var csv = artifacts.join(',') + '\n' + sizes.join(',')
   return file('artifact-sizes.csv', csv, {src: true})
-    .pipe(gulp.dest('./build/'))
+    .pipe(gulp.dest('./' + assetFolder + '/'))
 }
 
 // Creates loader file and saves to ./build 
@@ -132,7 +133,7 @@ function loader (name, features, min, payloadName) {
 
     return bundleStream
       .pipe(sourcemaps.write('./', {addComment: false}))
-      .pipe(gulp.dest('./build/'))
+      .pipe(gulp.dest('./' + assetFolder + '/'))
   }
 }
 
@@ -176,7 +177,7 @@ function payload (min, features, type) {
 
     return bundleStream
       .pipe(sourcemaps.write('./', {addComment: false}))
-      .pipe(gulp.dest('./build/'))
+      .pipe(gulp.dest('./' + assetFolder + '/'))
   }
 }
 
@@ -209,6 +210,6 @@ function plugin (name, min) {
 
     return bundleStream
       .pipe(sourcemaps.write('./', {addComment: false}))
-      .pipe(gulp.dest('./build/'))
+      .pipe(gulp.dest('./' + assetFolder + '/'))
   }
 }
