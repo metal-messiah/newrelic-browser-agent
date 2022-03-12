@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {handle} from './handle'
-var handleEE = handle.ee
-var globalEE = handle.globalEE
+import { handle, ee as handleEE, globalEE} from './handle'
 
 // export default defaultRegister
 export { globalRegister as global }

@@ -4,14 +4,12 @@
  */
 
 import { ee as eePkg, global } from './contextual-ee'
-var ee = eePkg.get('handle')
-var globalEE = global.get('handle')
+export var ee = eePkg.get('handle')
+export var globalEE = global.get('handle')
 
 // Exported for register-handler to attach to.
 // export default handle
 export { globalHandle as global }
-handle.ee = ee
-handle.globalEE = globalEE
 
 export function handle (type, args, ctx, group) {
   ee.buffer([type], group)

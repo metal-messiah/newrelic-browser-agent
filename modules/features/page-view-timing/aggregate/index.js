@@ -8,7 +8,7 @@ import { now } from '../../../common/timing/now'
 import { mapOwn } from '../../../common/util/map-own'
 import { send as sendHarvest } from '../../../common/harvest/harvest'
 import { HarvestScheduler } from '../../../common/harvest/harvest-scheduler';
-import { defaultRegister as register} from '../../../common/event-emitter/register-handler';
+import { global as globalRegister, registerHandler as register} from '../../../common/event-emitter/register-handler';
 import { subscribeToUnload }  from '../../../common/unload/unload';
 import { cleanURL } from '../../../common/url/clean-url';
 import { handle } from '../../../common/event-emitter/handle';
@@ -63,7 +63,7 @@ export function init(options) {
   console.log("pvt init")
   var scheduler = new HarvestScheduler('events', { onFinished: onHarvestFinished, getPayload: prepareHarvest })
 
-  register('timing', processTiming)
+  globalRegister('timing', processTiming)
   register('lcp', updateLatestLcp)
   register('cls', updateClsScore)
   register('pageHide', updatePageHide)

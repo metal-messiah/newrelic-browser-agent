@@ -2,7 +2,7 @@
  * Copyright 2020 New Relic Corporation. All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-import { handle } from '../../../common/event-emitter/handle'
+import { handle, global as globalHandle } from '../../../common/event-emitter/handle'
 import { subscribeToVisibilityChange } from '../../../common/window/visibility'
 import { eventListenerOpts } from '../../../common/event-listener/event-listener-opts'
 import { gosNREUM } from '../../../common/window/nreum'
@@ -133,8 +133,7 @@ function captureInteraction(evt) {
         }
 
         fiRecorded = true
-        // debugger
-        handle('timing', ['fi', fi, attributes])
+        globalHandle('timing', ['fi', fi, attributes])
     }
 }
 
