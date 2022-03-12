@@ -17,7 +17,8 @@ var config = require('config')
 
 var cleanURL = require('./clean-url')
 
-var version = '<VERSION>'  
+var version = '<VERSION>'
+var jsonp = 'NREUM.setToken'
 var _events = {}
 var haveSendBeacon = !!navigator.sendBeacon
 var tooManyRequestsDelay = config.getConfiguration('harvest.tooManyRequestsDelay') || 60
