@@ -5,3 +5,4 @@ import { originals } from './state/originals'
 import { getRuntime, setRuntime } from './state/runtime'
 
 export { getInfo, setInfo, getConfiguration, getConfigurationValue, setConfiguration, getLoaderConfig, setLoaderConfig, originals, getRuntime, setRuntime }
+console.log("test")
