@@ -4,3 +4,12 @@ tools/scripts/*.js
 **/vendor/*
 sandbox
 post-installer.js
+tests/assets/frameworks/*
+**/dist/*
+babel.config.js
+tools/test-builds/*
+tests/assets/test-builds/**/*.js
+tests/*
+cdn/*
+packages/browser-agent-core/cjs/*
+packages/builder.js

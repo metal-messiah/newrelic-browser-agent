@@ -125,6 +125,7 @@ features.wrappableAddEventListener = features.addEventListener
   // because in those versions, each descendent of Element gets its own unique
   // copy of addEventListener, rather than inheriting via the prototype chain.
   .exclude('firefox', '<25')
+  .exclude('phantom')
 
 features.hasInnerText = features.addEventListener
   // https://developer.mozilla.org/en-US/docs/Web/API/Node/innerText
@@ -208,7 +209,7 @@ features.fetch = new BrowserMatcher()
 // MDN shows this function as not supported
 // https://developer.mozilla.org/en-US/docs/Web/API/Body/arrayBuffer
 features.fetchExt = features.fetch.and(new BrowserMatcher()
-  .exclude('ios', '<=11')
+  .exclude('ios')
   .exclude('safari', '<11.1') // MDN says no support (11.1 currently latest), but 11.1 is accounted for in the tests
 )
 
@@ -341,3 +342,34 @@ features.passiveSupported = features.addEventListener
   .include('safari', '>9.3')
   .include('android', '>=93')
   .include('ios', '>=10')
+
+features.frameworks = new BrowserMatcher()
+  .exclude('*')
+  .include('chrome', 'latest')
+  .include('firefox', 'latest')
+  .include('ie', 'latest')
+  .include('safari', 'latest')
+  .include('android', 'latest')
+  .include('edge', 'latest')
+
+features.obfuscate = new BrowserMatcher()
+  .exclude('*')
+  .include('chrome', 'latest')
+  .include('firefox', 'latest')
+  .include('safari', 'latest')
+  .include('edge', 'latest')
+
+features.es6 = new BrowserMatcher()
+  .exclude('*')
+  .include('chrome', '>=60')
+  .include('safari', '>=11.3')
+  .include('firefox', '>=55')
+  .include('edge', '>79')
+  .include('ios', '>=11.3')
+
+  features.customElements = new BrowserMatcher()
+  .exclude('*')
+  .include('chrome', '>=67')
+  .include('firefox', '>=63')
+  .include('edge', '>=79')
+
